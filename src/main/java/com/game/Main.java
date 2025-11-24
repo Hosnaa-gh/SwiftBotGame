@@ -119,6 +119,7 @@ public class Main
 
                     if(input.equalsIgnoreCase("N") || input.equalsIgnoreCase("NO") )
                     {
+                        System.out.println("See you again champ!");
                         finish = false;
                         controlVar = false;
                     }
