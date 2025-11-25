@@ -68,11 +68,14 @@ public class Main
             {
                 swiftBot.disableAllButtons();
                 swiftBot.disableUnderlights();
-                // give Pi4J a short moment to stop input listeners
-                Thread.sleep(200);
+                Thread.sleep(2000);
             }
         }
-        catch (Exception e){}
+        catch (InterruptedException ie)
+        {
+            Thread.currentThread().interrupt();
+        }
+        catch (Exception ignored){}
 
 
         if(currentScore >= 5)
@@ -89,45 +92,15 @@ public class Main
 
     static void handleWrongPress(Button button, short currentRound, short currentScore)
     {
-        switch(button)
-        {
-            case Button.A:
-                swiftBot.enableButton(Button.B, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.X, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.Y, () -> gameOver(currentRound, currentScore));
-
-                break;
-
-            case Button.B:
-                swiftBot.enableButton(Button.A, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.X, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.Y, () -> gameOver(currentRound, currentScore));
-
-                break;
-
-            case Button.X:
-                swiftBot.enableButton(Button.A, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.B, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.Y, () -> gameOver(currentRound, currentScore));
-
-                break;
-
-            case Button.Y:
-                swiftBot.enableButton(Button.A, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.B, () -> gameOver(currentRound, currentScore));
-
-                swiftBot.enableButton(Button.X, () -> gameOver(currentRound, currentScore));
-
-                break;
+        // enable handlers for all other buttons and ignore if a handler already exists
+        for (Button b : Button.values()) {
+            if (b == button) continue;
+            try
+            {
+                swiftBot.enableButton(b, () -> gameOver(currentRound, currentScore));
+            }
+            catch (IllegalArgumentException ignored) {}
         }
-
     }
 
 
