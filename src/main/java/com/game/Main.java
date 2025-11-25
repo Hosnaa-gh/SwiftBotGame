@@ -1,4 +1,3 @@
-package com.game;
 
 
 import swiftbot.Button;
@@ -57,8 +56,6 @@ public class Main
     {
         swiftBot.enableButton(button,() -> {
 
-            controlVar[0] = false;
-
             if(savedButtons.get(index) != button)
             {
 
@@ -77,6 +74,8 @@ public class Main
 
                 System.exit(0);
             }
+
+            controlVar[0] = false;
 
         });
 
@@ -182,6 +181,7 @@ public class Main
                 final short currentScore = score;
 
                 boolean[] controlVar = {true};
+                swiftBot.disableAllButtons();
                 switch (savedUnderlights.get(i))
                 {
                     case FRONT_LEFT:
@@ -219,7 +219,7 @@ public class Main
 
             }
 
-            swiftBot.disableAllButtons();
+
             score++;
 
 
@@ -235,6 +235,8 @@ public class Main
                     if(input.equalsIgnoreCase("N") || input.equalsIgnoreCase("NO") )
                     {
                         System.out.println("See you again champ!");
+                        printScore(round, score);
+                        celebrationDive(score);
                         System.exit(0);
                     }
                     else if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("YES"))
