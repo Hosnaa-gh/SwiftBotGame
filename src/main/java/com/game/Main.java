@@ -63,11 +63,11 @@ public class Main
 
                 if(currentScore >= 5)
                 {
-                            /*
-
-                            Place robot dance here
-
-                            */
+                    try {
+                        celebrationDive(currentScore);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 System.exit(0);
