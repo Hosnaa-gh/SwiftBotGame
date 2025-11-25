@@ -52,14 +52,19 @@ public class Main
         System.out.println("\u001B[35m===============================\u001B[0m\n");
     }
 
-    static void handleButtons(Button button, ArrayList<Button> savedButtons, int index, short currentRound, short currentScore)
+    static void handleButtons(Button button, ArrayList<Button> savedButtons, int index, short currentRound,
+                           short currentScore, boolean[] controlVar)
     {
         swiftBot.enableButton(button,() -> {
 
+            controlVar[0] = false;
+
             if(savedButtons.get(index) != button)
             {
+
                 System.out.println("Game Over!");
                 printScore(currentRound, currentScore);
+
 
                 if(currentScore >= 5)
                 {
@@ -74,6 +79,7 @@ public class Main
             }
 
         });
+
     }
 
 
@@ -175,14 +181,45 @@ public class Main
                 final short currentRound = round;
                 final short currentScore = score;
 
-                handleButtons(Button.A, savedButtons, index, currentRound, currentScore);
-                handleButtons(Button.B, savedButtons, index, currentRound, currentScore);
-                handleButtons(Button.X, savedButtons, index, currentRound, currentScore);
-                handleButtons(Button.Y, savedButtons, index, currentRound, currentScore);
+                boolean[] controlVar = {true};
+                switch (savedUnderlights.get(i))
+                {
+                    case FRONT_LEFT:
+                        handleButtons(Button.A, savedButtons, index, currentRound, currentScore, controlVar);
+                        while(controlVar[0])
+                        {
+                            Thread.sleep(50);
+                        }
+                        break;
 
+                    case BACK_LEFT:
+                        handleButtons(Button.B, savedButtons, index, currentRound, currentScore, controlVar);
+                        while(controlVar[0])
+                        {
+                            Thread.sleep(50);
+                        }
+                        break;
+
+                    case FRONT_RIGHT:
+                        handleButtons(Button.X, savedButtons, index, currentRound, currentScore, controlVar);
+                        while(controlVar[0])
+                        {
+                            Thread.sleep(50);
+                        }
+                        break;
+
+                    case BACK_RIGHT:
+                        handleButtons(Button.Y, savedButtons, index, currentRound, currentScore, controlVar);
+                        while(controlVar[0])
+                        {
+                            Thread.sleep(50);
+                        }
+                        break;
+                }
 
             }
 
+            swiftBot.disableAllButtons();
             score++;
 
 
