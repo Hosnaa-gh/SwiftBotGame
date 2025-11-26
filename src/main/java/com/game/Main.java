@@ -1,4 +1,5 @@
 package com.game;
+
 import swiftbot.Button;
 import swiftbot.SwiftBotAPI;
 import swiftbot.Underlight;
@@ -252,6 +253,7 @@ public class Main
                         System.out.println("See you again champ!");
                         printScore(round, score);
                         celebrationDive(score);
+                        swiftBot.disableAllButtons();
                         System.exit(0);
                     }
                     else if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("YES"))
