@@ -14,18 +14,11 @@ import swiftbot.SwiftBotAPI;
 
 public class SwiftBot {
 
-    /* =========================================================
-       GLOBAL STATE
-       ========================================================= */
-
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final Random RANDOM = new Random();
     private static final String LOG_FILE_NAME = "./logs/noughts_crosses_log.txt";
     private static boolean sessionShouldTerminate = false;
 
-    /* =========================================================
-       MAIN
-       ========================================================= */
 
     public static void main(String[] args) {
         ConsoleUI ui = new ConsoleUI();
@@ -482,22 +475,17 @@ public class SwiftBot {
         try {
             String color = outcome.winnerPiece == Piece.O ? "GREEN" : "RED";
 
-            // FIX: First make sure robot is at start, then blink
             robot.forceBackToStartPose();
             robot.blink(color, 3);
 
-            // FIX: Trace the winning line by navigating between squares directly,
-            //      without returning to start between each square.
             if (outcome.winLine != null && outcome.winLine.length > 0) {
                 // Go to first square of the win line from start
                 robot.navigateTo(outcome.winLine[0].row, outcome.winLine[0].col);
 
-                // Visit remaining squares in the win line sequentially (no return to start)
                 for (int i = 1; i < outcome.winLine.length; i++) {
                     robot.navigateTo(outcome.winLine[i].row, outcome.winLine[i].col);
                 }
 
-                // After tracing all 3 squares, return to start
                 robot.returnToStart();
             }
 
@@ -849,7 +837,7 @@ public class SwiftBot {
        UI
        ========================================================= */
 
- static class ConsoleUI {
+   static class ConsoleUI {
 
     private static final int WIDTH = 66;
 
@@ -1224,6 +1212,7 @@ public class SwiftBot {
         System.out.print(s);
     }
 }
+
     /* =========================================================
        ROBOT LAYER
        ========================================================= */
@@ -1291,17 +1280,15 @@ public class SwiftBot {
             face(config.startDirection);
         }
 
-        // FIX: This method is now PUBLIC so runWinBehaviour can call it directly
-        //      for sequential win-line tracing without returning to start each time.
+  
         void navigateTo(int targetRow, int targetCol) {
             try {
                 double targetXcm = columnToPhysicalX(targetCol);
                 double targetYcm = rowToPhysicalY(targetRow);
 
-                // Move in Y (North/South) first
                 double deltaY = targetYcm - poseYcm;
                 if (Math.abs(deltaY) > 0.5) {
-                    // FIX: NORTH means decreasing row (upward on board), SOUTH means increasing row
+                    
                     Direction needed = deltaY < 0 ? Direction.NORTH : Direction.SOUTH;
                     face(needed);
                     moveForwardDistanceCm(Math.abs(deltaY));
@@ -1333,7 +1320,7 @@ public class SwiftBot {
             face(config.startDirection);
         }
 
-       
+        
         private double columnToPhysicalX(int col) {
             if (col == 0) {
                 return -config.startOffsetCm;
@@ -1341,7 +1328,7 @@ public class SwiftBot {
             return ((col - 1) * config.squareSizeCm) + config.halfSquareCm;
         }
 
-       
+    
         private double rowToPhysicalY(int row) {
             return ((row - 1) * config.squareSizeCm) + config.halfSquareCm;
         }
@@ -1352,6 +1339,7 @@ public class SwiftBot {
             int duration = (int) Math.round((distanceCm / config.squareSizeCm) * config.forwardUnitMs);
             invokeMove(100, 100, duration);
 
+          
             switch (poseDirection) {
                 case NORTH -> poseYcm -= distanceCm;
                 case SOUTH -> poseYcm += distanceCm;
